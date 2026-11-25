@@ -18,3 +18,28 @@ Thumbs.db
 pitch/render/
 pitch/build/node_modules/
 pitch/build/render/
+
+# Next.js (from create-next-app)
+/node_modules
+/.next/
+/out/
+/build
+/coverage
+.DS_Store
+*.pem
+npm-debug.log*
+.env*
+!.env.example
+.vercel
+*.tsbuildinfo
+next-env.d.ts
+
+# Kasauti: demo clips contain faces and must never reach the public repo
+demo/
+
+# node profile
+node_modules/
+dist/
+.vite/
+coverage/
+*.log

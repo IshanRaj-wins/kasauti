@@ -1,6 +1,6 @@
-# {{PROJECT_NAME}}
+# Kasauti
 
-{{PITCH}}
+Prove a tradesperson's skill live on their own phone; leave with a signed pass a contractor can check.
 
 **The coding rules live in [AGENTS.md](AGENTS.md). Read it before changing anything.** This file is the map and the workflow.
 
@@ -40,7 +40,13 @@ One phase per chat. Start a cleared chat with `/resume`; end it with `/wrap-up`.
 ## Map
 
 ```
-{{MAP}}
+src/app/             Next.js App Router: worker screens, /v contractor check, /api/* route handlers
+src/lib/             domain logic: challenge token, spoken-code, rubric/, grader/, transcriber/, decision, credential
+src/components/      UI pieces: PhoneFrame, CodeBadge, StepList, PassCard, QR
+tests/               vitest unit tests; tests/fixtures/ is locked (write-once)
+scripts/             gen-issuer-key.mjs, check-clip.mjs (rehearsal), gate.mjs
+public/              static assets
+demo/                GITIGNORED: recorded demo clips (faces). Never commit.
 docs/agent/          memory: HANDOFF, PROGRESS, TASKS, DECISIONS, LEARNINGS
 docs/                PLAN, SPEC, ACCEPTANCE, FACTS, API-NOTES, AI-LOG
 .claude/project.json code paths, locked paths, gate, formatters (hooks read this)
@@ -54,7 +60,14 @@ features.json        one entry per phase; only `passes` may change
 
 ## Commands
 
-{{COMMANDS}}
+```
+npm install            # install
+npm run gen-key        # once: prints ISSUER_PRIVATE_JWK + CHALLENGE_SECRET for .env
+npm run dev            # dev server on :3000 (camera works on localhost without HTTPS)
+npm test               # tests
+npm run typecheck && npm run lint
+node scripts/gate.mjs  # the full gate (same as CI)
+```
 
 ## Skills
 
@@ -66,6 +79,9 @@ features.json        one entry per phase; only `passes` may change
 - `verify-ui`: open the app with Playwright and screenshot the views that matter.
 - `pitch-deck`: build or update the judges' deck from the plan and FACTS.
 - `kit-sync`: copy a generic improvement back to the vibe-kit template.
+- `demo-run`: pre-pitch rehearsal of the 4 demo scenarios (PASS, RETAKE, REJECTED replay, tampered pass).
+
+Agent `claims-auditor` (read-only): checks UI copy, README and pitch script against the claims policy.
 
 ## Hooks (.claude/settings.json)
 
@@ -85,3 +101,10 @@ features.json        one entry per phase; only `passes` may change
 ## Gotchas
 
 (Add one line each time something surprising costs time and belongs here rather than in LEARNINGS.)
+
+- Next.js is 16.x: read `node_modules/next/dist/docs/` before using an API from memory (see AGENTS.md).
+- Browser camera/mic need HTTPS except on `localhost`; test phones against the Vercel URL.
+- Vercel functions reject request bodies over 4.5 MB: send 12 frames + an audio track, never the raw video.
+- Serverless memory does not persist: the challenge and the pass are self-contained signed tokens, no in-memory stores.
+- Gemini free tier: content is used to improve Google's products. Only the team's own demo clips go through it.
+- Prototype stand-ins (Gemini, local ES256 key, Vercel) are NOT the deck's stack (Bedrock, KMS, Lambda). Never call them by the deck's names in UI or README.

@@ -1,4 +1,47 @@
 {
   "_rules": "One entry per phase. Only the `passes` field may change, and only to true when every ACCEPTANCE line for that phase passes. Never delete or reword entries.",
-  "features": []
+  "features": [
+    {
+      "id": "P0",
+      "name": "Pitch deck + research freeze",
+      "acceptance": "docs/ACCEPTANCE.md#p0",
+      "passes": true
+    },
+    {
+      "id": "P1",
+      "name": "Scaffold + harness",
+      "acceptance": "docs/ACCEPTANCE.md#p1",
+      "passes": true
+    },
+    {
+      "id": "P2",
+      "name": "Worker app shell and design tokens",
+      "acceptance": "docs/ACCEPTANCE.md#p2",
+      "passes": false
+    },
+    {
+      "id": "P3",
+      "name": "Live capture with one-time code",
+      "acceptance": "docs/ACCEPTANCE.md#p3",
+      "passes": false
+    },
+    {
+      "id": "P4",
+      "name": "Checks, grading and decision",
+      "acceptance": "docs/ACCEPTANCE.md#p4",
+      "passes": false
+    },
+    {
+      "id": "P5",
+      "name": "Signed pass and contractor check",
+      "acceptance": "docs/ACCEPTANCE.md#p5",
+      "passes": false
+    },
+    {
+      "id": "P6",
+      "name": "Demo hardening, deploy and recording",
+      "acceptance": "docs/ACCEPTANCE.md#p6",
+      "passes": false
+    }
+  ]
 }

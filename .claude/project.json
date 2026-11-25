@@ -1,9 +1,68 @@
 {
-  "name": "{{PROJECT_NAME}}",
-  "profile": "unset",
-  "codePaths": ["src/", "app/", "tests/", "scripts/"],
-  "lockedPaths": [],
-  "gate": [],
-  "format": [],
-  "blockedCommands": []
+  "name": "Kasauti",
+  "profile": "node",
+  "codePaths": [
+    "src/",
+    "tests/",
+    "public/",
+    "scripts/",
+    "package.json",
+    "next.config.ts",
+    "tsconfig.json",
+    "eslint.config.mjs",
+    "vitest.config.ts"
+  ],
+  "lockedPaths": [
+    "tests/fixtures/"
+  ],
+  "gate": [
+    {
+      "name": "typecheck",
+      "cmd": "npm run typecheck --if-present",
+      "ifExists": "package.json"
+    },
+    {
+      "name": "lint",
+      "cmd": "npm run lint --if-present",
+      "ifExists": "package.json"
+    },
+    {
+      "name": "test",
+      "cmd": "npm test --if-present --silent",
+      "ifExists": "package.json"
+    },
+    {
+      "name": "build",
+      "cmd": "npm run build --if-present",
+      "ifExists": "package.json"
+    }
+  ],
+  "format": [
+    {
+      "ext": [
+        ".ts",
+        ".tsx",
+        ".js",
+        ".jsx",
+        ".mjs",
+        ".css",
+        ".json",
+        ".html"
+      ],
+      "cmd": [
+        "npx",
+        "--no-install",
+        "prettier",
+        "--write",
+        "--log-level",
+        "warn",
+        "{file}"
+      ]
+    }
+  ],
+  "blockedCommands": [
+    "git add demo",
+    "git add -f demo",
+    "git add .env"
+  ]
 }
