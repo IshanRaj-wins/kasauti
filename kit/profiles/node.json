@@ -1,0 +1,30 @@
+{
+  "codePaths": ["src/", "tests/", "public/", "scripts/", "package.json", "index.html", "vite.config.ts", "tsconfig.json"],
+  "gate": [
+    { "name": "typecheck", "cmd": "npm run typecheck --if-present", "ifExists": "package.json" },
+    { "name": "lint", "cmd": "npm run lint --if-present", "ifExists": "package.json" },
+    { "name": "test", "cmd": "npm test --if-present --silent", "ifExists": "package.json" },
+    { "name": "build", "cmd": "npm run build --if-present", "ifExists": "package.json" }
+  ],
+  "format": [{ "ext": [".ts", ".tsx", ".js", ".jsx", ".mjs", ".css", ".json", ".html"], "cmd": ["npx", "--no-install", "prettier", "--write", "--log-level", "warn", "{file}"] }],
+  "gitignore": ["node_modules/", "dist/", ".vite/", "coverage/", "*.log"],
+  "commands": [
+    "npm install            # install",
+    "npm run dev            # dev server",
+    "npm test               # tests",
+    "npm run typecheck && npm run lint",
+    "node scripts/gate.mjs  # the full gate (same as CI)"
+  ],
+  "map": [
+    "src/                app source",
+    "tests/              tests (or colocated *.test.ts)",
+    "public/             static assets"
+  ],
+  "stackRules": [
+    "- TypeScript strict; no `any` without a comment saying why.",
+    "- React: function components, state as local as possible, no prop drilling past two levels.",
+    "- Styling through design tokens (CSS variables / Tailwind theme), never raw hex in components.",
+    "- Every user-visible async state has loading, empty and error UI.",
+    "- Prettier formats on save (PostToolUse hook)."
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "codePaths": ["src/", "tests/", "scripts/", "notebooks/", "app/", "pyproject.toml", "uv.lock"],
+  "gate": [
+    { "name": "lint", "cmd": "uv run ruff check .", "ifExists": "pyproject.toml" },
+    { "name": "format", "cmd": "uv run ruff format --check .", "ifExists": "pyproject.toml" },
+    { "name": "test", "cmd": "uv run pytest -q", "ifExists": "tests" },
+    { "name": "web-install", "cmd": "npm ci --no-audit --no-fund", "cwd": "app/web", "ifExists": "app/web/package-lock.json", "ciOnly": true },
+    { "name": "web-typecheck", "cmd": "npm run typecheck --if-present", "cwd": "app/web", "ifExists": "app/web/package.json" },
+    { "name": "web-build", "cmd": "npm run build", "cwd": "app/web", "ifExists": "app/web/package.json" }
+  ],
+  "format": [
+    { "ext": [".py"], "cmd": ["uv", "run", "--quiet", "ruff", "format", "{file}"] },
+    { "ext": [".ts", ".tsx", ".css"], "cmd": ["npx", "--no-install", "prettier", "--write", "--log-level", "warn", "{file}"], "cwd": "app/web" }
+  ],
+  "gitignore": ["__pycache__/", ".venv/", "*.egg-info/", ".pytest_cache/", ".ruff_cache/", ".ipynb_checkpoints/", "mlruns/", "data/raw/", "data/interim/", "node_modules/", "app/web/dist/"],
+  "commands": [
+    "uv sync                                  # Python environment",
+    "uv run pytest -q                         # backend tests",
+    "uv run uvicorn {{SLUG_PY}}.api.main:app --reload   # API on :8000",
+    "cd app/web && npm install && npm run dev # frontend on :5173",
+    "node scripts/gate.mjs                    # the full gate (same as CI)"
+  ],
+  "map": [
+    "src/{{SLUG_PY}}/      Python package: pipeline, models, API",
+    "tests/              pytest; fixtures in tests/fixtures/",
+    "app/web/            React + Vite + TypeScript frontend",
+    "notebooks/          exploration only; import from src/, outputs stripped"
+  ],
+  "stackRules": [
+    "- Python 3.11+ with uv; type hints on public functions; ruff formats on save.",
+    "- Logic lives in `src/`; notebooks and the API import it.",
+    "- API: FastAPI + Pydantic models for every request and response; errors return a clear message and status.",
+    "- Frontend: TypeScript strict, function components, design tokens instead of raw hex, loading / empty / error states for every async view.",
+    "- The frontend never computes science or business logic; it renders what the API returns.",
+    "- Random seeds are fixed and logged for anything stochastic."
+  ]
+}

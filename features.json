@@ -1,0 +1,4 @@
+{
+  "_rules": "One entry per phase. Only the `passes` field may change, and only to true when every ACCEPTANCE line for that phase passes. Never delete or reword entries.",
+  "features": []
+}

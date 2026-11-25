@@ -1,0 +1,29 @@
+name: ci
+# CI runs the same gate as local work: node scripts/gate.mjs, which reads .claude/project.json.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Set up uv
+        if: hashFiles('pyproject.toml') != ''
+        uses: astral-sh/setup-uv@v5
+      - name: Python deps
+        if: hashFiles('pyproject.toml') != ''
+        run: uv sync --all-extras --dev
+      - name: Node deps (root)
+        if: hashFiles('package-lock.json') != ''
+        run: npm ci --no-audit --no-fund
+      - name: Gate
+        run: node scripts/gate.mjs
+        env:
+          CI: "true"
